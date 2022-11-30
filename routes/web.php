@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Tutorials\Facades\StringModifier;
+use App\Tutorials\Facades\StringModifierFacade;
+
+// use App\Tutorials\Facades\StringModifier;
+// use App\Tutorials\Facades\StringModifierFacade;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +34,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+//Dependency Injection
+// Route::get('/StringModifier', function(StringModifier $string){
+//     // app()->make(StringModifier::class)->reverse('petrit');
+//     $string->reverse('petrit');
+// });
+
+//Facade
+Route::get('/StringModifier', function(){
+    StringModifierFacade::reverse('petrit');
+});
