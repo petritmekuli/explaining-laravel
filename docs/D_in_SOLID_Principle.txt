@@ -1,0 +1,67 @@
+/**
+ * S(Single Responsibility Principle)(ex. a class, function etc. Shouldn't be too big.)
+ * O(Open-Close Principle)(Open for extension, close for modification. Ex vendor folder shouldn't be changed.)
+ * L(Liskov Substitution Principle)(It means classes that implement the same interface you need to be safe changing one class with another. Type-hint functions parameters, also return. And interface functions params that sometimes are more than required.)
+ * I(Interface Segregation Principle)(Or in human language interface separation principle. When interface is too big, maybe separate it.)
+ * D(Dependency inversion)()
+ */
+
+Stage One
+    // $car = new Car();
+    putin new inside the constructor means SOLID principle, the D is broken. D stands for
+    Dependency Inversion. With a few words, it means abstract and concrete can depend only on
+    abstraction. Ex. a concrete class can depend only on an abstraction(or interface).
+    Some reasons why this is not recomanded are:
+    1)Car doesn't have to know about dependencies of Engine, or take care of them.
+    2)Making changes on Engine means having to change all the classes using it.
+    3)When classes are tight coupling instead of loose coupling means testing is difficult.
+    tip)Is better depending in abstraction, because it is easier to switch between the classes.
+
+Stage Two
+    $car = new Car(new Engine());
+    By passing dependencies as params instead of creating them inside the constructor,
+    means we got the testability while unit testing. And that is because for example
+    when we are testing Car class we test it alone not the other classes it depends
+    in this case Engine. Engine class should be tested elsewhere. But how, well while
+    testing as params you can use mock. Basically methods return true. And with
+    object initializing inside constructor it's hard to do so.
+    The point one and two from stage one are still present. But they are placed not
+    at the constructor but where you are initializing the object. In this case Car.
+
+Stage Three
+    $container = new Container();
+    $container->set(Car::class, function(Container $c){});
+    $car = $container->get(Car::class);
+
+    At the stage three we can see clearly the need of use of Service Container(IoC).
+    Without Service Container then Dependency Injection is all we could do on the stage two.
+    Which is not much if we put testing away, since we had to provide all the dependencies
+    manually every time we need the Car. For example if Car has 20 dependencies tree. Then
+    Car knows to much about other classes, which is not car responsibility.
+    Building a car doesn't have to be that hard. Example what if you want to use Car
+    to get from point A to point B, and you don't care if the engine is with Gas, Diesel
+    or Electric car. The other point is what if there are made changes in the engine class,
+    there should be made changes everywhere Engine has been used. So Service Container allows
+    us to store dependencies once and in one place and use all over the application also
+    changing in one place. In laravel this place is Service Provider register method.\
+    In stage three container it's so simple all it does is in the bindings array
+    as index uses the class path, and as a value a Callable function. So when it needs
+    to create a new instance goes and check if this array has that index. If not
+    then it can't figure it out. Service container works using recursion. Basically
+    the first time check if that class is registered in the service container and
+    goes back time to time to service container to get other dependencies. But Service
+    Containers use PHPReflection as well which is described in stage four. So in the stage three
+    in case to retrieve a Dependency you first have to set in the service container.
+    Which is not always the case. And it will be shown in the stage four.
+
+Stage four
+
+    $container = new Container();
+    $car = $container->get(Car::class);
+
+    Stage four can figure it out how to create object with dependencies that are not
+    primitive datatypes also the type is defined and it can do that even without setting
+    to the service container manually. In laravel service container is much more
+    sophisticated, and it treats function injection as well. But here we are taking care
+    only about constructor injection and leaving out a lot of things and considering
+    only the main functionality.
