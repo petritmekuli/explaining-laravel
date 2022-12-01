@@ -160,9 +160,9 @@ return [
             'rule-name' => 'custom-message',
         ],
         //changes applied only to input fields that match the key. In this case title.
-        'title' => [
-            'required' => 'The :attribute must be filled.'
-        ]
+        // 'title' => [
+        //     'required' => 'The :attribute must be filled.'
+        // ]
     ],
 
     /*
@@ -177,8 +177,8 @@ return [
     */
 
     //change the :attribute that has the value from the HTML->input field->name(attribute)
-    'attributes' => [
-        'body' => 'post body'
-    ],
+    // 'attributes' => [
+    //     'body' => 'post body'
+    // ],
 
 ];
