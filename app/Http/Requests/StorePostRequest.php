@@ -26,7 +26,7 @@ class StorePostRequest extends FormRequest
      * However if you will you can validate the form until a field breaks a rule. If that happens the
      * validation will stop and the error messages for that field will be set to the messageBag.
      */
-    protected $stopOnFirstFailure = true;
+    // protected $stopOnFirstFailure = true;
 
     /**
      * Determine if the user is authorized to make this request.
