@@ -35,8 +35,11 @@ class PostController extends Controller
          * validation instance using Validator::make();
          */
 
-        // Validating the request input
-        $request->validate([
+        /**
+         *By default the validate method flashes the $errors bag but if there are more than
+         *one form in the same file then you can name this errors with different names.
+         */
+        $request->validateWithBag('post', [
             'title' => ['required','alpha', 'min:3'],
             'body' => ['required', 'alpha']
         ]);
