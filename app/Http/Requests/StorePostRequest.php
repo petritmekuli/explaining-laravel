@@ -39,6 +39,27 @@ class StorePostRequest extends FormRequest
     }
 
     /**
+     * To show that the messages are being customized from the messages() below I commented all the
+     * changes made to the lang/en/validation.php file. And that means the messages are as Laravel
+     * provides by default and made some changes inside the messages() method below.
+     */
+    public function messages()
+    {
+        return [
+            'title.required' => ':attribute is required.',
+            'body.alpha' => ':attribute should contain only letters.',
+        ];
+    }
+
+    //Similar functionality as messages(), but the changes apply to the :attribute
+    public function attributes(){
+        return [
+            'title' => 'post title',
+            'body' => 'post body',
+        ];
+    }
+
+    /**
      * That's all you have to do to be able to validate form as you were using the request validate().
      * But unlike the validate() method you can customize some behaviors, error messages etc. When
      * using FormRequests.
