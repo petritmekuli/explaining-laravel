@@ -14,6 +14,12 @@ class StorePostRequest extends FormRequest
      * are broken by doing the validation from the controller
      */
 
+    /** As Laravel supposes you redirect back to the file that fires the submit action almost everytime.
+     * However you can customize this behavior by providing one of the two attributes below.
+     */
+    protected $redirect = '/post';
+    // protected $redirectRoute = 'post.index';
+
     /**
      * Determine if the user is authorized to make this request.
      *
