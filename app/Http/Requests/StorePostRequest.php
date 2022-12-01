@@ -17,8 +17,16 @@ class StorePostRequest extends FormRequest
     /** As Laravel supposes you redirect back to the file that fires the submit action almost everytime.
      * However you can customize this behavior by providing one of the two attributes below.
      */
-    protected $redirect = '/post';
+    // protected $redirect = '/post';
     // protected $redirectRoute = 'post.index';
+
+    /**
+     * Again as Laravel supposes you would like to have all the error messages for each field. This
+     * means it will validate all the fields and add the specific errors for each of them in the messageBag.
+     * However if you will you can validate the form until a field breaks a rule. If that happens the
+     * validation will stop and the error messages for that field will be set to the messageBag.
+     */
+    protected $stopOnFirstFailure = true;
 
     /**
      * Determine if the user is authorized to make this request.
