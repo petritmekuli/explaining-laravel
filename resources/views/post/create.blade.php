@@ -21,6 +21,11 @@
                 <span style="color:red">{{$titleError}}</span>
             @endforeach
         @enderror
+        @error('invalid_word')
+            @foreach($errors->get('invalid_word') as $invalidWord)
+                <span style="color:red"> {{ $invalidWord }}</span>
+            @endforeach
+        @enderror
 
         </br>
 

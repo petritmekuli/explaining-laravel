@@ -49,9 +49,20 @@ class StorePostRequest extends FormRequest
                 $validator->errors()->add('alert', 'Pay more attention, you can\'t get away with invalid data. You got ' . $count . ' errors.');
             }
 
-    /**
-     * That's all you have to do to be able to validate form as you were using the request validate().
-     * But unlike the validate() method you can customize some behaviors, error messages etc. When
-     * using FormRequests.
-     */
+            /**
+             * Similarly you can check if form fields contain some of unaccepted words etc. For
+             * example you want to make sure that your form is not going to be filled with dummy data
+             * like lorem ipsum.
+             */
+
+            // dd($validator);
+            // dd(get_class_methods($validator));
+            $invalidWords = ['lorem', 'ipsum'];
+            foreach($invalidWords as $invalidWord){
+                if(str_contains($validator->getData()['title'], $invalidWord)){
+                    $validator->errors()->add('invalid_word', "Title is not allowed to contain this word: $invalidWord ");
+                }
+            }
+        });
+    }
 }
