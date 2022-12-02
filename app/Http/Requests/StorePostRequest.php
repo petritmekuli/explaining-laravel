@@ -34,35 +34,22 @@ class StorePostRequest extends FormRequest
     {
         return [
             'title' => ['required','alpha', 'min:3'],
-            'body' => ['required', 'alpha']
+            'body' => ['required', 'alpha'],
+            'lucky_code' => [function ($attribute, $value, $fail) {
+                if ($value !== 7) {
+                    // $fail('The '.$attribute.' is invalid.');
+                    $fail('Uppsss! Try Again.');
+                }
+            },]
         ];
     }
 
-    public function withValidator($validator){
-        // if(!$validator->fails()){
-            //runs after validation.
-        // }
-        $validator->after(function ($validator) {
-            // dd('No errors but still a hit');
-
-            if(($count = $validator->errors()->count()) >= 3){
-                $validator->errors()->add('alert', 'Pay more attention, you can\'t get away with invalid data. You got ' . $count . ' errors.');
-            }
-
-            /**
-             * Similarly you can check if form fields contain some of unaccepted words etc. For
-             * example you want to make sure that your form is not going to be filled with dummy data
-             * like lorem ipsum.
-             */
-
-            // dd($validator);
-            // dd(get_class_methods($validator));
-            $invalidWords = ['lorem', 'ipsum'];
-            foreach($invalidWords as $invalidWord){
-                if(str_contains($validator->getData()['title'], $invalidWord)){
-                    $validator->errors()->add('invalid_word', "Title is not allowed to contain this word: $invalidWord ");
-                }
-            }
-        });
+    protected function prepareForValidation(){
+        // Not that useful example but the idea is tu illustrate the point of prepareForValidation use.
+        $this->merge([
+            // lucky code number is 7
+            // 'lucky_code' => 7,
+            'lucky_code' => rand(0,9),
+        ]);
     }
 }

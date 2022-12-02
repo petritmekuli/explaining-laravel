@@ -10,6 +10,9 @@
     @error('alert')
         <span style="color:red">{{ $errors->first('alert') }}</span>
     @enderror
+    @error('lucky_code')
+        <span style="color:red">{{ $errors->first('lucky_code') }}</span>
+    @enderror
     <form method="POST" action="{{route('post.store')}}">
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
 
