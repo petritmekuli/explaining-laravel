@@ -7,6 +7,9 @@
     <title>Document</title>
 </head>
 <body>
+    @error('alert')
+        <span style="color:red">{{ $errors->first('alert') }}</span>
+    @enderror
     <form method="POST" action="{{route('post.store')}}">
         <input type="hidden" name="_token" value="{{ csrf_token() }}" />
 
