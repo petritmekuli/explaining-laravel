@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -16,13 +17,37 @@ class PostController extends Controller
         return view('post.create');
     }
 
-    public function store(StorePostRequest $request){
+    public function store(Request $request){
         /**
-         * We are using StorePostRequest to validate.
-         * If we reached this action it means all the data were valid data
+         * If you decide to validate your form data inside the controller instead of FormRequest class
+         * but still you want to customize some behaviors that are not provided using the request()
+         * method on the Request instance, you can do so by creating a Validator by yourself.
          */
 
-        // Post::create($request->validated());
+        /**
+         * This make() accepts four arguments. The first one is an array of data that should be
+         * validated or knows as the input data provided from the form, the second one is an array
+         * of rules basically what rules should be applied to what fields, the third argument is
+         * an array of messages customization and the fourth is an array of attributes customization.
+         * If you don't want to customize how data should be flashed to the session and where this
+         * action should redirect then you may attach the validate(). This means you made changes
+         * on the error messages and attribute names. But the rest is of functionality is as usual.
+         */
+        Validator::make(
+            $request->only(['title', 'body']),
+            [
+                // alpha doesn't allow spaces ' '
+                'title' => ['required','alpha', 'min:3'],
+                'body' => ['required', 'alpha'],
+            ],
+            [
+                'title.required' => 'Post must have a :attribute.'
+            ],
+            [
+                'title' => 'post title'
+            ]
+        )->validate();
+
         Post::create($request->only(['title', 'body']));
         return redirect()->route('post.index');
     }
