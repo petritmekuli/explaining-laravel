@@ -33,7 +33,7 @@ class PostController extends Controller
          * action should redirect then you may attach the validate(). This means you made changes
          * on the error messages and attribute names. But the rest is of functionality is as usual.
          */
-        Validator::make(
+        $validator = Validator::make(
             $request->only(['title', 'body']),
             [
                 // alpha doesn't allow spaces ' '
@@ -46,7 +46,24 @@ class PostController extends Controller
             [
                 'title' => 'post title'
             ]
-        )->validate();
+        );
+
+        /**
+         * This is not more advance functionality than the CreatePostRequest offers. However if you
+         * like to do the validation inside the controller and still change the where you redirect,
+         * error messages and attribute names this is how you can do it.
+         */
+
+        // If you want to stop validation on the first failure.
+        // if($validator->stopOnFirstFailure()->fails()){
+        if($validator->fails()){
+            return redirect()
+            ->route('post.create')
+            ->withInput()
+            ->withErrors($validator);
+            // ->withErrors($validator, 'bag name');
+            // ->withErrors($validator->errors());
+        }
 
         Post::create($request->only(['title', 'body']));
         return redirect()->route('post.index');
