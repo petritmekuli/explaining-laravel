@@ -19,52 +19,65 @@ class PostController extends Controller
 
     public function store(Request $request){
         /**
-         * If you decide to validate your form data inside the controller instead of FormRequest class
-         * but still you want to customize some behaviors that are not provided using the request()
-         * method on the Request instance, you can do so by creating a Validator by yourself.
+         * Typically a relationship between a user and a post would be a many to many relationship.
+         * However in this case we are using an array to store user(writer) data just to show how
+         * array validation works.
          */
+        $user = [
+            'name' => 'Petrit',
+            'email' => 'petrit@example.com',
+            // 'favorite_category' => 'SomeCategory'
+        ];
 
-        /**
-         * This make() accepts four arguments. The first one is an array of data that should be
-         * validated or knows as the input data provided from the form, the second one is an array
-         * of rules basically what rules should be applied to what fields, the third argument is
-         * an array of messages customization and the fourth is an array of attributes customization.
-         * If you don't want to customize how data should be flashed to the session and where this
-         * action should redirect then you may attach the validate(). This means you made changes
-         * on the error messages and attribute names. But the rest is of functionality is as usual.
-         */
-        $validator = Validator::make(
-            $request->only(['title', 'body']),
+        $request->merge(['user' => $user]);
+
+        Validator::make(
+            $request->only(['title', 'body', 'categories', 'user']),
             [
                 // alpha doesn't allow spaces ' '
                 'title' => ['required','alpha', 'min:3'],
                 'body' => ['required', 'alpha'],
+                'categories.*' => ['nullable', 'min:2'],
+                'categories.0' => ['required', 'min:3'], //Overriding nullable and min:2
+                /**
+                 * Each key in the array we are validating should have an associated key in the
+                 * validation rule keys. If we try to send more keys with array than we are
+                 * expecting in the validation rule list, an exception will be thrown.
+                 * */
+                'user' => ['required', 'array:name,email']
             ],
             [
-                'title.required' => 'Post must have a :attribute.'
+                // :index is also available to be used.
+                // 'categories.*.required' => "The categories #:position field is required"
             ],
             [
-                'title' => 'post title'
+                'categories.*' => 'categories #:position'
+            ]
+        )->validate();
+
+        /**
+         * data from form: title='Title', body='Body', categories #1='first', categories #2=null
+         * but sizeof($request->input('categories')); is still 2. But we would like the size of
+         * categories array to be the same as the number of categories provided in the form. And
+         * not as all the categories form fields provided. We can use array_filter().
+         */
+        $request->merge(
+            ['categories' => array_filter($request->categories, function($value){
+                    /** This is what array_filter does by default. So in this case no need to provide this
+                     * closure. However if some if condition needed, this is how you do it. Return false
+                     * means remove that element from array.
+                     */
+                    return $value !== null;
+                })
             ]
         );
 
         /**
-         * This is not more advance functionality than the CreatePostRequest offers. However if you
-         * like to do the validation inside the controller and still change the where you redirect,
-         * error messages and attribute names this is how you can do it.
+         * These categories aren't being associated with the created post, because this was meant to
+         * only show how array validation works. And to store these categories to database, first
+         * categories table should be created and a relationship many to many with posts table.
+         * After that you associate categories to the created post.
          */
-
-        // If you want to stop validation on the first failure.
-        // if($validator->stopOnFirstFailure()->fails()){
-        if($validator->fails()){
-            return redirect()
-            ->route('post.create')
-            ->withInput()
-            ->withErrors($validator);
-            // ->withErrors($validator, 'bag name');
-            // ->withErrors($validator->errors());
-        }
-
         Post::create($request->only(['title', 'body']));
         return redirect()->route('post.index');
     }
