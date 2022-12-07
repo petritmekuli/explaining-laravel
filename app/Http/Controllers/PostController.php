@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\App;
 
-use App\Rules\StartsWithUppercase;
+use App\Rules\StartsWithUppercase2;
 
 class PostController extends Controller
 {
@@ -23,7 +23,7 @@ class PostController extends Controller
     public function store(Request $request){
             $request->validate(
                 [
-                    'title' => ['required','alpha', 'min:3', new StartsWithUppercase()],
+                    'title' => ['required','alpha', 'min:3', new StartsWithUppercase2()],
                     'body' => ['required', 'alpha', function($attributeName, $attributeValue, $fail){
                         if(! preg_match('/[A-Z]/', $attributeValue[0])){
                             // $fail(trans('validation.starts_with_uppercase'));
