@@ -24,11 +24,6 @@
                 <span style="color:red">{{$titleError}}</span>
             @endforeach
         @enderror
-        @error('invalid_word')
-            @foreach($errors->get('invalid_word') as $invalidWord)
-                <span style="color:red"> {{ $invalidWord }}</span>
-            @endforeach
-        @enderror
         </br>
 
         <label for="title">Body</label>
@@ -40,24 +35,8 @@
         @endif
         </br>
 
-        @foreach (range(0,1) as $x)
-            <label for="categories">Categories #{{ $x+1 }}</label>
-            {{-- <input type="text" name="categories[]"> --}}
-            <input type="text" name="categories[]" value="{{old("categories.$x")}}">
-            @if($errors->has("categories.$x"))
-                @foreach ($errors->get("categories.$x") as $categoryError)
-                    <span style="color:red">{{ $categoryError }}</span>
-                @endforeach
-            @endif
-            </br>
-        @endforeach
-        </br>
-
         {{-- <input type="submit" value="Create"> --}}
         <button type="submit">Create</button>
     </form>
-    @error('user')
-        <span style="color:red;">{{ $errors->first('user') }}</span>
-    @enderror
 </body>
 </html>

@@ -143,7 +143,7 @@ return [
     'uppercase' => 'The :attribute must be uppercase.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
-
+    'starts_with_uppercase' => 'The :attribute must start with uppercase. Try: :validValue.',
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
