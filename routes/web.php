@@ -31,6 +31,6 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::get('/testing', function(){
-
     return 'testing';
+
 });
