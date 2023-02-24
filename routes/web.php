@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,3 +31,12 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/post', function(){
+    return view('post.index');
+})->name('post.index');
+
+Route::get('/posts/count', function () {
+    $count = Post::count();
+    return response()->json(['count' => $count]);
+});
