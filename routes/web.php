@@ -29,3 +29,14 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/user', function () {
+    // We need to include User to be able to use it here. But there is no require or
+    // include so this means Autoloader is doing it for us.
+    $user = App\Repositories\UserRepository::create();
+    return $user;
+});
+
+Route::get('/truncate', function () {
+    App\Models\User::truncate();
+});
