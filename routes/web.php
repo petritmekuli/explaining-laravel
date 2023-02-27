@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
+// Including UserRepository manually to bring the functionality back.
+include '../UserRepository.php';
 /*
 |--------------------------------------------------------------------------
 | Web Routes
